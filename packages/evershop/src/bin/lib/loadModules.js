@@ -62,6 +62,16 @@ const coreModules = [
     path: path.resolve(__dirname, '../../modules/openpay')
   },
   {
+    name: 'isracard',
+    resolve: path.resolve(__dirname, '../../modules/isracard'),
+    path: path.resolve(__dirname, '../../modules/isracard')
+  },
+  {
+    name: 'mercadopago',
+    resolve: path.resolve(__dirname, '../../modules/mercadopago'),
+    path: path.resolve(__dirname, '../../modules/mercadopago')
+  },
+  {
     name: 'promotion',
     resolve: path.resolve(__dirname, '../../modules/promotion'),
     path: path.resolve(__dirname, '../../modules/promotion')

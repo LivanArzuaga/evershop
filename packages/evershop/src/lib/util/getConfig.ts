@@ -64,6 +64,23 @@ type ConfigStructure = {
       status?: number;
       [key: string]: unknown;
     };
+    isracard?: {
+      apiBaseUrl?: string;
+      merchantId?: string;
+      terminalId?: string;
+      apiUsername?: string;
+      apiPassword?: string;
+      apiKey?: string;
+      status?: number;
+      [key: string]: unknown;
+    };
+    mercadopago?: {
+      accessToken?: string;
+      publicKey?: string;
+      sandboxMode?: number;
+      status?: number;
+      [key: string]: unknown;
+    };
   };
   catalog: {
     collectionPageSize: number;

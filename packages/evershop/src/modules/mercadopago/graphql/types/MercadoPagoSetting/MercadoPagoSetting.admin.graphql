@@ -1,0 +1,7 @@
+extend type Setting {
+  mercadopagoPaymentStatus: Int
+  mercadopagoDisplayName: String
+  mercadopagoAccessToken: String
+  mercadopagoPublicKey: String
+  mercadopagoSandboxMode: Int
+}

@@ -1,0 +1,4 @@
+{
+  "methods": ["GET"],
+  "path": "/isracard/processing/:order_id"
+}

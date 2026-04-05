@@ -4,8 +4,9 @@ export default {
   Setting: {
     openpayPaymentStatus: (setting) => {
       const openpayConfig = getConfig('system.openpay', {});
-      if (openpayConfig?.status !== undefined) {
-        return openpayConfig.status;
+      const configuredStatus = Number(openpayConfig?.status);
+      if (configuredStatus === 1) {
+        return configuredStatus;
       }
       const openpayPaymentStatus = setting.find(
         (s) => s.name === 'openpayPaymentStatus'

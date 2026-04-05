@@ -4,16 +4,22 @@ import { registerPaymentMethod } from '../checkout/services/getAvailablePaymentM
 import { getSetting } from '../setting/services/setting.js';
 
 export default async () => {
-  const openpayPaymentStatus = {
+  const mercadoPagoPaymentStatus = {
     order: {
       paymentStatus: {
-        openpay_captured: {
+        mercadopago_captured: {
           name: 'Captured',
           badge: 'success',
           isDefault: false,
           isCancelable: false
         },
-        openpay_failed: {
+        mercadopago_pending: {
+          name: 'Pending',
+          badge: 'attention',
+          isDefault: false,
+          isCancelable: false
+        },
+        mercadopago_failed: {
           name: 'Failed',
           badge: 'critical',
           isDefault: false,
@@ -21,9 +27,10 @@ export default async () => {
         }
       },
       psoMapping: {
-        'openpay_captured:*': 'processing',
-        'openpay_captured:delivered': 'completed',
-        'openpay_failed:*': 'new'
+        'mercadopago_captured:*': 'processing',
+        'mercadopago_captured:delivered': 'completed',
+        'mercadopago_pending:*': 'new',
+        'mercadopago_failed:*': 'new'
       }
     }
   } as {
@@ -42,21 +49,21 @@ export default async () => {
     };
   };
 
-  config.util.setModuleDefaults('oms', openpayPaymentStatus);
+  config.util.setModuleDefaults('oms', mercadoPagoPaymentStatus);
 
   registerPaymentMethod({
     init: async () => ({
-      code: 'openpay',
-      name: await getSetting('openpayDisplayName', 'Openpay')
+      code: 'mercadopago',
+      name: await getSetting('mercadopagoDisplayName', 'Mercado Pago')
     }),
     validator: async () => {
-      const openpayConfig = getConfig('system.openpay', {});
-      const configuredStatus = Number(openpayConfig?.status);
-      const openpayStatus =
+      const mercadoPagoConfig = getConfig('system.mercadopago', {});
+      const configuredStatus = Number(mercadoPagoConfig?.status);
+      const mercadopagoStatus =
         configuredStatus === 1
           ? configuredStatus
-          : await getSetting('openpayPaymentStatus', 0);
-      return Number(openpayStatus) === 1;
+          : await getSetting('mercadopagoPaymentStatus', 0);
+      return Number(mercadopagoStatus) === 1;
     }
   });
 };

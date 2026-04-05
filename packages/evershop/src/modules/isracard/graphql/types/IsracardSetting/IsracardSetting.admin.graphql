@@ -1,0 +1,10 @@
+extend type Setting {
+  isracardPaymentStatus: Int
+  isracardDisplayName: String
+  isracardApiBaseUrl: String
+  isracardMerchantId: String
+  isracardTerminalId: String
+  isracardApiUsername: String
+  isracardApiPassword: String
+  isracardApiKey: String
+}

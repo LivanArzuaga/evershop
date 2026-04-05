@@ -4,16 +4,16 @@ import { registerPaymentMethod } from '../checkout/services/getAvailablePaymentM
 import { getSetting } from '../setting/services/setting.js';
 
 export default async () => {
-  const openpayPaymentStatus = {
+  const isracardPaymentStatus = {
     order: {
       paymentStatus: {
-        openpay_captured: {
+        isracard_captured: {
           name: 'Captured',
           badge: 'success',
           isDefault: false,
           isCancelable: false
         },
-        openpay_failed: {
+        isracard_failed: {
           name: 'Failed',
           badge: 'critical',
           isDefault: false,
@@ -21,9 +21,9 @@ export default async () => {
         }
       },
       psoMapping: {
-        'openpay_captured:*': 'processing',
-        'openpay_captured:delivered': 'completed',
-        'openpay_failed:*': 'new'
+        'isracard_captured:*': 'processing',
+        'isracard_captured:delivered': 'completed',
+        'isracard_failed:*': 'new'
       }
     }
   } as {
@@ -42,21 +42,22 @@ export default async () => {
     };
   };
 
-  config.util.setModuleDefaults('oms', openpayPaymentStatus);
+  config.util.setModuleDefaults('oms', isracardPaymentStatus);
 
   registerPaymentMethod({
     init: async () => ({
-      code: 'openpay',
-      name: await getSetting('openpayDisplayName', 'Openpay')
+      code: 'isracard',
+      name: await getSetting('isracardDisplayName', 'Isracard')
     }),
     validator: async () => {
-      const openpayConfig = getConfig('system.openpay', {});
-      const configuredStatus = Number(openpayConfig?.status);
-      const openpayStatus =
+      const isracardConfig = getConfig('system.isracard', {});
+      const configuredStatus = Number(isracardConfig?.status);
+      const isracardStatus =
         configuredStatus === 1
           ? configuredStatus
-          : await getSetting('openpayPaymentStatus', 0);
-      return Number(openpayStatus) === 1;
+          : await getSetting('isracardPaymentStatus', 0);
+
+      return Number(isracardStatus) === 1;
     }
   });
 };
