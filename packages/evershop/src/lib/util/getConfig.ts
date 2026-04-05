@@ -56,6 +56,14 @@ type ConfigStructure = {
       status?: number;
       [key: string]: unknown;
     };
+    openpay?: {
+      clientId?: string;
+      clientSecret?: string;
+      environment?: string;
+      authEnvironment?: string;
+      status?: number;
+      [key: string]: unknown;
+    };
   };
   catalog: {
     collectionPageSize: number;

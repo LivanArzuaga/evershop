@@ -1,7 +1,7 @@
 import { readFileSync, existsSync, mkdirSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { insert, select } from '@evershop/postgres-query-builder';
+import { insert, select, update } from '@evershop/postgres-query-builder';
 import { CONSTANTS } from '../../lib/helpers.js';
 import { error, info, success } from '../../lib/log/logger.js';
 import { getConnection } from '../../lib/postgres/connection.js';
@@ -113,7 +113,8 @@ export async function seedWidgets(): Promise<void> {
 
     const connection = await getConnection();
     let created = 0;
-    let skipped = 0;
+    let updated = 0;
+    const skipped = 0;
 
     for (const widgetData of widgetsData) {
       // Check if widget already exists (by name and type)
@@ -123,17 +124,28 @@ export async function seedWidgets(): Promise<void> {
         .and('type', '=', widgetData.type)
         .load(connection, false);
 
-      if (existing) {
-        info(`  ⊘ Widget "${widgetData.name}" already exists, skipping...`);
-        skipped++;
-        continue;
-      }
-
       // Process settings - download slideshow images if needed
       let processedSettings = widgetData.settings;
       if (widgetData.type === 'simple_slider') {
         info(`  → Processing slideshow images for: ${widgetData.name}`);
         processedSettings = await downloadSlideshowImages(widgetData.settings);
+      }
+
+      if (existing) {
+        await update('widget')
+          .given({
+            area: widgetData.area,
+            route: JSON.stringify(widgetData.route),
+            sort_order: widgetData.sort_order,
+            settings: JSON.stringify(processedSettings),
+            status: widgetData.status
+          })
+          .where('uuid', '=', existing.uuid)
+          .execute(connection, false);
+
+        info(`  → Updated widget: ${widgetData.name}`);
+        updated++;
+        continue;
       }
 
       // Insert widget
@@ -154,7 +166,7 @@ export async function seedWidgets(): Promise<void> {
     }
 
     success(
-      `✓ Widget seeding complete: ${created} created, ${skipped} skipped`
+      `✓ Widget seeding complete: ${created} created, ${updated} updated, ${skipped} skipped`
     );
   } catch (e: any) {
     error(`Failed to seed widgets: ${e.message}`);

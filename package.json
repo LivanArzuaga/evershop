@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "node ./packages/evershop/dist/bin/dev/index.js",
     "start": "node ./packages/evershop/dist/bin/start/index.js",
-    "build": "node ./packages/evershop/dist/bin/build/index.js",
+    "build": "npm run compile:db && npm run compile && node ./packages/evershop/dist/bin/build/index.js",
+    "seed": "evershop seed",
     "build-fast": "evershop build -- --skip-minify",
     "setup": "evershop install",
     "theme:active": "evershop theme:active",
@@ -22,16 +23,23 @@
     "start:debug": "node ./packages/evershop/dist/bin/start/index.js --debug",
     "test": "ALLOW_CONFIG_MUTATIONS=true NODE_OPTIONS=--experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./packages",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "npm run compile:db && npm run compile"
   },
   "author": "The Nguyen (https://evershop.io)",
   "license": "GNU GENERAL PUBLIC LICENSE 3.0",
   "devDependencies": {
-    "@parcel/watcher": "^2.5.1",
+    "@evershop/postgres-query-builder": "^2.0.1",
+    "@parcel/watcher": "^2.5.6",
     "@swc/cli": "^0.7.7",
     "@swc/core": "^1.11.29",
+    "@types/config": "^3.3.5",
+    "@types/express": "^5.0.6",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.5.0",
+    "@types/pg": "^8.20.0",
+    "@types/react": "^19.2.14",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.32.0",
     "copyfiles": "^2.4.1",
@@ -40,7 +48,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
-    "execa": "^9.6.0",
+    "execa": "^9.6.1",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "prettier": "2.8.4",
@@ -48,7 +56,7 @@
     "rimraf": "^6.0.1",
     "swc-minify-webpack-plugin": "^2.1.3",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.3",
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "dependencies": {

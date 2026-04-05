@@ -1,0 +1,5 @@
+{
+  "methods": ["POST"],
+  "path": "/openpay/orders",
+  "access": "public"
+}

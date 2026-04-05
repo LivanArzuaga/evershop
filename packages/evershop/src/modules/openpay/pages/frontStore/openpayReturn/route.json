@@ -1,0 +1,4 @@
+{
+  "methods": ["GET"],
+  "path": "/openpay/processing/:order_id"
+}

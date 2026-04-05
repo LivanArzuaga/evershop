@@ -30,6 +30,14 @@
           "type": "custom",
           "uuid": "/page/about-us",
           "children": []
+        },
+        {
+          "id": "admin-link-0001",
+          "url": "/admin",
+          "name": "Admin",
+          "type": "custom",
+          "uuid": "/admin",
+          "children": []
         }
       ],
       "isMain": "1",

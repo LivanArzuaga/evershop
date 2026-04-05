@@ -1,0 +1,6 @@
+extend type Setting {
+  openpayDisplayName: String
+  openpayEnvironment: String
+  openpayClientId: String
+  openpayClientSecret: String
+}

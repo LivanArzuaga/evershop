@@ -37,6 +37,38 @@ export default function BasicMenu({
   const isMobile = useIsMobile();
   const [currentPath, setCurrentPath] = React.useState('');
 
+  const menusWithAdmin = React.useMemo(() => {
+    if (!isMain || menus.some((item) => item.url === '/admin')) {
+      return menus;
+    }
+
+    const index = menus.findIndex(
+      (item) =>
+        item.url === '/page/about-us' ||
+        item.name.toLowerCase() === 'about us' ||
+        item.name.toLowerCase().includes('about')
+    );
+
+    const adminItem = {
+      id: 'admin-link',
+      name: 'Admin',
+      url: '/admin',
+      type: 'custom',
+      uuid: 'admin-link',
+      children: []
+    };
+
+    if (index === -1) {
+      return [...menus, adminItem];
+    }
+
+    return [
+      ...menus.slice(0, index + 1),
+      adminItem,
+      ...menus.slice(index + 1)
+    ];
+  }, [menus, isMain]);
+
   React.useEffect(() => {
     setCurrentPath(window.location.pathname);
   }, []);
@@ -95,7 +127,7 @@ export default function BasicMenu({
             >
               <NavigationMenu className="w-full max-w-full">
                 <NavigationMenuList className="flex-col md:flex-row items-start md:items-center w-full md:w-auto">
-                  {menus.map((item) => (
+                  {menusWithAdmin.map((item) => (
                     <NavigationMenuItem
                       key={item.uuid}
                       className="w-full md:w-auto"
